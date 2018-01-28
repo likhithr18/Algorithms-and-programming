@@ -1,0 +1,94 @@
+//Huffman coding is a lossless data compression algorithm.
+//The idea is to assign variable-length codes to input characters, lengths of the assigned codes are based on the frequencies of corresponding characters. The most frequent character gets the smallest code and the least frequent character gets the largest code.
+//The variable-length codes assigned to input characters are Prefix Codes, means the codes (bit sequences) are assigned in such a way that the code assigned to one character is not prefix of code assigned to any other character. 
+//This is how Huffman Coding makes sure that there is no ambiguity when decoding the generated bit stream.
+
+
+#include<bits/stdc++.h>
+#include<vector>
+#include<string.h>
+using namespace std;
+struct MinHeapnode{
+    char data;
+    unsigned freq;
+    MinHeapnode *left ,*right;
+    MinHeapnode( char c, unsigned freq)
+    {
+        left=right=NULL;
+        this->data=c;
+        this->freq=freq;
+    }
+   
+};
+struct compare{
+    bool operator()(MinHeapnode *l,MinHeapnode *r)
+    {
+        return l->freq > r->freq;
+    }
+};
+void printCodes(struct MinHeapnode* root, string str)
+{
+ 
+    if (!root)
+        return;
+ 
+    if (root->data != '$')
+       cout  << str <<" ";
+ 
+    printCodes(root->left, str + "0");
+    printCodes(root->right, str + "1");
+}
+void huffmancodes(char data[],int freq[], int size)
+{
+    struct MinHeapnode *left ,*right,*top;
+    priority_queue<MinHeapnode*,vector<MinHeapnode*>,compare> minheap;
+    for(int i=0;i<size;i++)
+    {
+        minheap.push(new MinHeapnode(data[i],freq[i]));
+       
+    }
+    while(minheap.size()!=1)
+    {
+        left=minheap.top();
+        minheap.pop();
+        right=minheap.top();
+        minheap.pop();
+        top=new MinHeapnode('$',left->freq+right->freq);
+        top->left=left;
+        top->right=right;
+        minheap.push(top);
+       
+    }
+    printCodes(minheap.top(),"");
+   // printtree()
+}
+ 
+ 
+ 
+int main()
+ {
+    //code
+    int t;
+    cin>>t;
+    while(t--)
+    {
+       char s[100];
+       scanf("%s",s);
+       int len,cou=0,i;
+       for(i=0;s[i]!='\0';i++)
+       cou++;
+       len=cou;
+       //cout<<len<<endl;
+       int fre[len];
+       for(int j=0;j<len;j++)
+       {
+           cin>>fre[j];
+       }
+       huffmancodes(s,fre,len);
+       cout<<endl;
+       
+       
+       
+    }
+    return 0;
+}
