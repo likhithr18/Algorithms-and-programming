@@ -1,0 +1,39 @@
+#include<iostream>
+using namespace std;
+int main()
+ {
+    //code
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n,k,count=0,stock=0,i,temp;
+        cin>>k>>n;
+        int a[n];
+        for(i=0;i<n;i++)
+        cin>>a[i];
+        i=0;
+        while(i<n-1 && count<k)
+        {
+            //local minimum
+            while( i<n-1 && a[i+1]<=a[i] )
+            i++;
+            if(i==n-1)
+            break;
+            cout<<a[i]<<" ";
+            temp=a[i++];
+           
+            //i++;
+            //local maximum
+            while( i<n &&  a[i]>=a[i-1] )
+            i++;
+            stock+=a[i-1]-temp;
+            cout<<a[i-1]<<" ";
+           
+            count++;
+           
+        }
+      cout<<stock<<endl;
+    }
+    return 0;
+}
